@@ -1,56 +1,45 @@
-const refeicoes = [
-  { horario: "🕔 5h30", descricao: "2 ovos inteiros + 4 claras, 1 copo de leite desnatado, 1 fatia de pão integral ou 3 colheres de aveia", proteina: 34 },
-  { horario: "🕖 9h", descricao: "Sanduíche com 2 fatias de pão integral + 80g de frango desfiado, 1 colher de sopa de pasta de amendoim", proteina: 29 },
-  { horario: "🕛 12h", descricao: "150g de peito de frango, arroz integral + feijão ou legumes, 1 ovo", proteina: 51 },
-  { horario: "🕔 16h", descricao: "4 claras + 1 ovo inteiro (omelete), 1 fruta, 1 colher de pasta de amendoim", proteina: 26 },
-  { horario: "🕖 19h30", descricao: "120g de frango grelhado/cozido, vegetais + arroz ou batata-doce", proteina: 36 },
-  { horario: "🕘 21h", descricao: "1 copo de leite desnatado, 1 colher de pasta de amendoim", proteina: 12 },
-];
+// script.js
 
-function carregarRefeicoes() {
-  const container = document.getElementById("refeicoes");
-  container.innerHTML = "";
-  refeicoes.forEach(r => {
-    const div = document.createElement("div");
-    div.classList.add("refeicao");
-    div.innerHTML = `<h3>${r.horario}</h3><p>${r.descricao}</p><strong>≈ ${r.proteina}g proteína</strong>`;
-    container.appendChild(div);
-  });
+$(document).ready(function () { const alimentos = [ { nome: 'Ovo inteiro', unidade: 'unidade', proteina: 6, qtdDiaria: 4 }, { nome: 'Clara de ovo', unidade: 'unidade', proteina: 3.5, qtdDiaria: 8 }, { nome: 'Leite desnatado', unidade: 'ml', proteina: 4, qtdDiaria: 400 }, { nome: 'Pão integral', unidade: 'fatia', proteina: 3, qtdDiaria: 3 }, { nome: 'Aveia', unidade: 'colher de sopa', proteina: 1.5, qtdDiaria: 3 }, { nome: 'Frango', unidade: 'g', proteina: 0.3, qtdDiaria: 350 }, { nome: 'Pasta de amendoim', unidade: 'colher de sopa', proteina: 4, qtdDiaria: 3 }, { nome: 'Banana', unidade: 'unidade', proteina: 1, qtdDiaria: 1 }, { nome: 'Vegetais', unidade: 'porção', proteina: 2, qtdDiaria: 1 }, { nome: 'Arroz integral', unidade: 'porção', proteina: 4, qtdDiaria: 2 }, { nome: 'Feijão', unidade: 'porção', proteina: 5, qtdDiaria: 1 }, { nome: 'Batata-doce', unidade: 'porção', proteina: 2, qtdDiaria: 1 } ];
+
+function gerarFormularioPersonalizado() { let html = '<form id="custom-protein-form" class="space-y-4">';
+
+alimentos.forEach((item, index) => {
+  html += `
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
+      <label class="font-semibold">${item.nome} (${item.unidade}):</label>
+      <input type="number" min="0" step="any" data-index="${index}" value="${item.qtdDiaria}" class="qtd-input border rounded p-1 w-full" />
+    </div>`;
+});
+
+html += '<button type="submit" class="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Calcular Proteínas</button>';
+html += '</form><div id="resultado-personalizado" class="mt-6"></div>';
+
+$('#resumo-alimentos').html(html);
+
+$('#custom-protein-form').on('submit', function (e) {
+  e.preventDefault();
+  calcularProteinasPersonalizadas();
+});
+
 }
 
-let grafico;
+function calcularProteinasPersonalizadas() { let totalProteina = 0; let lista = '<ul class="list-disc pl-5">';
 
-function criarGrafico() {
-  const ctx = document.getElementById('graficoProteinas');
-  grafico = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: refeicoes.map(r => r.horario),
-      datasets: [{
-        label: 'Proteína por refeição (g)',
-        data: refeicoes.map(r => r.proteina),
-        backgroundColor: '#4caf50'
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        title: { display: true, text: 'Distribuição de Proteína por Refeição' }
-      }
-    }
-  });
+$('.qtd-input').each(function () {
+  const index = $(this).data('index');
+  const qtd = parseFloat($(this).val());
+  const alimento = alimentos[index];
+  const proteina = qtd * alimento.proteina;
+  totalProteina += proteina;
+
+  lista += `<li><strong>${alimento.nome}</strong>: ${qtd} ${alimento.unidade} → <span class="text-blue-700">${proteina.toFixed(1)}g proteína</span></li>`;
+});
+
+lista += `</ul><p class="mt-4 text-lg font-bold">Total diário de proteína: <span class="text-green-700">${totalProteina.toFixed(1)}g</span></p>`;
+$('#resultado-personalizado').html(lista);
+
 }
 
-function atualizarGrafico() {
-  const alvo = parseInt(document.getElementById('proteinaAlvo').value);
-  const totalAtual = refeicoes.reduce((acc, r) => acc + r.proteina, 0);
-  const fator = alvo / totalAtual;
-  refeicoes.forEach(r => r.proteina = Math.round(r.proteina * fator));
-  carregarRefeicoes();
-  grafico.data.datasets[0].data = refeicoes.map(r => r.proteina);
-  grafico.update();
-}
+gerarFormularioPersonalizado(); });
 
-carregarRefeicoes();
-criarGrafico();

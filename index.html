@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dieta Diária - Proteínas</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>🗓️ Dieta Diária (~188g de proteína)</h1>
+    <div class="controls">
+      <label for="proteinaAlvo">Meta de proteína diária:</label>
+      <input type="number" id="proteinaAlvo" value="188">g
+      <button onclick="atualizarGrafico()">Atualizar</button>
+    </div>
+    <div class="refeicoes" id="refeicoes"></div>
+    <canvas id="graficoProteinas"></canvas>
+  </div>
+  <script src="script.js"></script>
+</body>
+        </html>

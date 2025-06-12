@@ -1,6 +1,6 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f4f4f9;
+  background: #f0f2f5;
   margin: 0;
   padding: 0;
   color: #333;
@@ -8,47 +8,71 @@ body {
 
 .container {
   max-width: 800px;
-  margin: auto;
-  padding: 2rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
   text-align: center;
+  color: #2c3e50;
+}
+
+.meal {
   margin-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
 }
 
-.refeicao {
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  border-left: 4px solid #4caf50;
-  background: #f9f9f9;
-  border-radius: 8px;
-  animation: fadeIn 0.5s ease-in;
+.meal h2 {
+  margin-bottom: 0.5rem;
+  color: #3498db;
 }
 
-.refeicao h3 {
-  margin-top: 0;
+ul.ingredient-list {
+  list-style-type: disc;
+  margin-left: 20px;
 }
 
-.controls {
-  text-align: center;
-  margin-bottom: 2rem;
+.ingredient {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
 }
 
-.controls input {
+.ingredient input {
   width: 60px;
-  padding: 4px;
-  margin: 0 5px;
+  margin: 0 10px;
 }
 
-canvas {
+.summary {
   margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 2px solid #ccc;
+  text-align: center;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+#monthly-summary {
+  margin-top: 1.5rem;
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.6rem 1rem;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #2980b9;
 }

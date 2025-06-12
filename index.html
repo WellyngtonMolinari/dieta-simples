@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dieta Diária - Proteínas</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dieta Diária de Proteínas</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>🗓️ Dieta Diária (~188g de proteína)</h1>
-    <div class="controls">
-      <label for="proteinaAlvo">Meta de proteína diária:</label>
-      <input type="number" id="proteinaAlvo" value="188">g
-      <button onclick="atualizarGrafico()">Atualizar</button>
+    <h1>📅 Dieta Diária (sem whey)</h1>
+    <div id="schedule"></div>
+    <div class="summary">
+      <p><strong>Proteína Total:</strong> <span id="total-protein">0g</span></p>
+      <p><strong>Alimentos totais:</strong> <span id="total-items">0</span></p>
+      <button id="monthly-button">📦 Ver Necessário por Mês</button>
     </div>
-    <div class="refeicoes" id="refeicoes"></div>
-    <canvas id="graficoProteinas"></canvas>
+    <div id="monthly-summary" style="display: none;"></div>
   </div>
+
   <script src="script.js"></script>
 </body>
-</html>

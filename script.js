@@ -1,45 +1,41 @@
-// script.js
+const meals = [ { time: "5h30", title: "Ao acordar", ingredients: [ { name: "Ovo inteiro", quantity: 2, protein: 6 }, { name: "Clara de ovo", quantity: 4, protein: 3.5 }, { name: "Leite desnatado (200ml)", quantity: 1, protein: 8 }, { name: "Pão integral / Aveia", quantity: 1, protein: 0 } ] }, { time: "9h", title: "Lanche no trabalho", ingredients: [ { name: "Pão integral (2 fatias)", quantity: 1, protein: 5 }, { name: "Frango desfiado (80g)", quantity: 1, protein: 25 }, { name: "Pasta de amendoim (1 colher)", quantity: 1, protein: 4 } ] }, { time: "12h", title: "Almoço", ingredients: [ { name: "Peito de frango grelhado (150g)", quantity: 1, protein: 45 }, { name: "Arroz + Feijão / Legumes", quantity: 1, protein: 0 }, { name: "Ovo (1 unidade)", quantity: 1, protein: 6 } ] }, { time: "16h", title: "Lanche da tarde", ingredients: [ { name: "Clara de ovo (4)", quantity: 4, protein: 3.5 }, { name: "Ovo inteiro", quantity: 1, protein: 6 }, { name: "Fruta", quantity: 1, protein: 0 }, { name: "Pasta de amendoim (1 colher)", quantity: 1, protein: 4 } ] }, { time: "19h30", title: "Jantar (pós-treino)", ingredients: [ { name: "Frango (120g)", quantity: 1, protein: 36 }, { name: "Vegetais + arroz / batata-doce", quantity: 1, protein: 0 } ] }, { time: "21h", title: "Ceia", ingredients: [ { name: "Leite desnatado (200ml)", quantity: 1, protein: 8 }, { name: "Pasta de amendoim (1 colher)", quantity: 1, protein: 4 } ] } ];
 
-$(document).ready(function () { const alimentos = [ { nome: 'Ovo inteiro', unidade: 'unidade', proteina: 6, qtdDiaria: 4 }, { nome: 'Clara de ovo', unidade: 'unidade', proteina: 3.5, qtdDiaria: 8 }, { nome: 'Leite desnatado', unidade: 'ml', proteina: 4, qtdDiaria: 400 }, { nome: 'Pão integral', unidade: 'fatia', proteina: 3, qtdDiaria: 3 }, { nome: 'Aveia', unidade: 'colher de sopa', proteina: 1.5, qtdDiaria: 3 }, { nome: 'Frango', unidade: 'g', proteina: 0.3, qtdDiaria: 350 }, { nome: 'Pasta de amendoim', unidade: 'colher de sopa', proteina: 4, qtdDiaria: 3 }, { nome: 'Banana', unidade: 'unidade', proteina: 1, qtdDiaria: 1 }, { nome: 'Vegetais', unidade: 'porção', proteina: 2, qtdDiaria: 1 }, { nome: 'Arroz integral', unidade: 'porção', proteina: 4, qtdDiaria: 2 }, { nome: 'Feijão', unidade: 'porção', proteina: 5, qtdDiaria: 1 }, { nome: 'Batata-doce', unidade: 'porção', proteina: 2, qtdDiaria: 1 } ];
+function renderMeals() { const container = document.getElementById("meals"); container.innerHTML = ""; let totalProtein = 0; let itemCounts = {};
 
-function gerarFormularioPersonalizado() { let html = '<form id="custom-protein-form" class="space-y-4">';
+meals.forEach((meal) => { const mealDiv = document.createElement("div"); mealDiv.className = "meal";
 
-alimentos.forEach((item, index) => {
-  html += `
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
-      <label class="font-semibold">${item.nome} (${item.unidade}):</label>
-      <input type="number" min="0" step="any" data-index="${index}" value="${item.qtdDiaria}" class="qtd-input border rounded p-1 w-full" />
-    </div>`;
+const title = document.createElement("h3");
+title.textContent = `🕒 ${meal.time} — ${meal.title}`;
+
+const ul = document.createElement("ul");
+ul.className = "ingredient-list";
+
+let proteinPerMeal = 0;
+meal.ingredients.forEach((ingredient) => {
+  const li = document.createElement("li");
+  li.textContent = `${ingredient.name} — ${ingredient.quantity}x`; // Don't show protein in list
+
+  proteinPerMeal += ingredient.protein * ingredient.quantity;
+  itemCounts[ingredient.name] = (itemCounts[ingredient.name] || 0) + ingredient.quantity;
+
+  ul.appendChild(li);
 });
 
-html += '<button type="submit" class="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Calcular Proteínas</button>';
-html += '</form><div id="resultado-personalizado" class="mt-6"></div>';
+totalProtein += proteinPerMeal;
 
-$('#resumo-alimentos').html(html);
+const proteinInfo = document.createElement("p");
+proteinInfo.textContent = `Total por refeição: ${proteinPerMeal.toFixed(1)}g de proteína`;
 
-$('#custom-protein-form').on('submit', function (e) {
-  e.preventDefault();
-  calcularProteinasPersonalizadas();
+mealDiv.appendChild(title);
+mealDiv.appendChild(ul);
+mealDiv.appendChild(proteinInfo);
+container.appendChild(mealDiv);
+
 });
 
-}
+document.getElementById("totalProtein").textContent = 🔚 Proteína total estimada: ${totalProtein.toFixed(1)}g;
 
-function calcularProteinasPersonalizadas() { let totalProteina = 0; let lista = '<ul class="list-disc pl-5">';
+const monthlyList = document.getElementById("monthlyList"); monthlyList.innerHTML = ""; Object.keys(itemCounts).forEach((item) => { const li = document.createElement("li"); li.textContent = ${item}: ${itemCounts[item] * 30} unidades/mês; monthlyList.appendChild(li); }); }
 
-$('.qtd-input').each(function () {
-  const index = $(this).data('index');
-  const qtd = parseFloat($(this).val());
-  const alimento = alimentos[index];
-  const proteina = qtd * alimento.proteina;
-  totalProteina += proteina;
-
-  lista += `<li><strong>${alimento.nome}</strong>: ${qtd} ${alimento.unidade} → <span class="text-blue-700">${proteina.toFixed(1)}g proteína</span></li>`;
-});
-
-lista += `</ul><p class="mt-4 text-lg font-bold">Total diário de proteína: <span class="text-green-700">${totalProteina.toFixed(1)}g</span></p>`;
-$('#resultado-personalizado').html(lista);
-
-}
-
-gerarFormularioPersonalizado(); });
+document.addEventListener("DOMContentLoaded", renderMeals);
 
